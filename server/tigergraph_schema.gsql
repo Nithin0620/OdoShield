@@ -1,0 +1,92 @@
+CREATE GRAPH fraud_detection()
+
+USE GRAPH fraud_detection
+
+// Create Vertex Types
+CREATE VERTEX Vehicle (
+  PRIMARY_ID vin STRING,
+  v_id STRING,
+  make STRING,
+  model STRING,
+  year INT,
+  owner_id STRING,
+  registered_date DATETIME,
+  mileage INT
+)
+
+CREATE VERTEX Owner (
+  PRIMARY_ID owner_id STRING,
+  name STRING,
+  email STRING,
+  phone STRING,
+  registration_date DATETIME
+)
+
+CREATE VERTEX DataSource (
+  PRIMARY_ID source_id STRING,
+  source_type STRING,
+  source_name STRING,
+  provider STRING
+)
+
+CREATE VERTEX MileageRecord (
+  PRIMARY_ID record_id STRING,
+  vin STRING,
+  timestamp DATETIME,
+  mileage INT,
+  source_type STRING,
+  anomaly_score DOUBLE
+)
+
+CREATE VERTEX FraudIndicator (
+  PRIMARY_ID indicator_id STRING,
+  indicator_type STRING,
+  severity STRING,
+  description STRING,
+  timestamp DATETIME,
+  source STRING
+)
+
+// Create Edge Types
+CREATE UNDIRECTED EDGE OWNS (
+  FROM Owner,
+  TO Vehicle
+)
+
+CREATE UNDIRECTED EDGE REPORTED_BY (
+  FROM Vehicle,
+  TO DataSource,
+  last_verified DATETIME,
+  status STRING
+)
+
+CREATE UNDIRECTED EDGE HAS_RECORD (
+  FROM Vehicle,
+  TO MileageRecord
+)
+
+CREATE UNDIRECTED EDGE HAS_INDICATOR (
+  FROM Vehicle,
+  TO FraudIndicator
+)
+
+CREATE UNDIRECTED EDGE CONNECTED_TO (
+  FROM Vehicle,
+  TO Vehicle,
+  connection_type STRING,
+  connection_strength DOUBLE
+)
+
+// Create Graph
+CREATE GRAPH fraud_detection (
+  Vehicle,
+  Owner,
+  DataSource,
+  MileageRecord,
+  FraudIndicator,
+  OWNS,
+  REPORTED_BY,
+  HAS_RECORD,
+  HAS_INDICATOR,
+  CONNECTED_TO
+)

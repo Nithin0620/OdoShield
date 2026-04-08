@@ -1,0 +1,14 @@
+owner_id,name,email,phone,registration_date
+OWN001,John Smith,john.smith@email.com,555-0101,2012-03-10
+OWN002,Sarah Johnson,sarah.j@email.com,555-0102,2020-06-15
+OWN003,Michael Brown,m.brown@email.com,555-0103,1998-11-20
+OWN004,Jessica Davis,j.davis@email.com,555-0104,2008-09-05
+OWN005,Robert Wilson,r.wilson@email.com,555-0105,2013-08-12
+OWN006,Emma Martinez,e.martinez@email.com,555-0106,2013-10-22
+OWN007,David Garcia,d.garcia@email.com,555-0107,2014-12-30
+OWN008,Lisa Anderson,l.anderson@email.com,555-0108,2015-03-18
+OWN009,James Taylor,j.taylor@email.com,555-0109,2002-07-25
+OWN010,Maria Thomas,m.thomas@email.com,555-0110,2002-06-14
+OWN011,Christopher Moore,c.moore@email.com,555-0111,2013-04-08
+OWN012,Jennifer Jackson,j.jackson@email.com,555-0112,2013-08-20
+OWN013,Daniel White,d.white@email.com,555-0113,2005-02-10

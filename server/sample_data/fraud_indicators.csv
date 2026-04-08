@@ -1,0 +1,16 @@
+indicator_id,vin,indicator_type,severity,description,timestamp,source
+IND001,JTMB74A04D0019874,mileage_discrepancy,high,Odometer rollback detected between Carfax and OBD-II reading,2023-04-10T16:20:00Z,carfax
+IND002,JTMB74A04D0019874,mileage_anomaly,high,Unusual mileage jump of 1800 miles in 5 days,2023-05-05T11:00:00Z,odometer
+IND003,JTMB74A04D0019874,title_problem,critical,Multiple title transfers in 6 months,2023-05-10T09:30:00Z,title
+IND004,JM1BL54F000204160,mileage_discrepancy,high,Mileage decreased by 1300 miles in Carfax report,2023-03-18T12:10:00Z,carfax
+IND005,JM1BL54F000204160,mileage_anomaly,medium,Inconsistent mileage readings from inspection,2023-04-08T09:55:00Z,inspection
+IND006,WVWZZZ3CZ9E269714,mileage_discrepancy,high,Odometer rollback detected - 7000 mile discrepancy,2023-03-30T10:20:00Z,carfax
+IND007,WVWZZZ3CZ9E269714,flood_damage,critical,Previous flood damage reported in title history,2023-04-01T14:00:00Z,title
+IND008,WVWZZZ3CZ9E269714,mileage_anomaly,high,Rapid mileage increase suggesting odometer tampering,2023-04-15T13:15:00Z,insurance
+IND009,3G1FB1E38D4164828,mileage_discrepancy,medium,Minor mileage variance from different sources,2023-03-15T12:45:00Z,carfax
+IND010,3G1FB1E38D4164828,salvage_title,critical,Branded as salvage title - rebuild status unclear,2023-04-20T08:20:00Z,title
+IND011,KMHLN4AJ5DU054435,mileage_anomaly,low,Occasional minor mileage discrepancy,2023-02-15T10:30:00Z,odometer
+IND012,2HGEJ6252YH546186,mileage_anomaly,medium,High mileage vehicle with inconsistent records,2023-03-22T14:15:00Z,inspection
+IND013,5FNHL6H76FB123456,mileage_discrepancy,low,Minimal discrepancy within expected range,2023-02-10T11:20:00Z,odometer
+IND014,1G1FB1E30F1124916,mileage_anomaly,low,Normal mileage progression for vehicle age,2023-02-28T09:45:00Z,odometer
+IND015,WBADT33452B123456,salvage_title,critical,Vehicle previously declared as salvage,2023-01-15T16:30:00Z,title

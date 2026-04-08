@@ -1,0 +1,11 @@
+source_id,source_type,source_name,provider
+SRC001,odometer,OBD-II Scanner,ElectronicControl
+SRC002,carfax,Carfax History,Carfax Inc
+SRC003,autocheck,AutoCheck History,TransUnion
+SRC004,dmv,DMV Records,Department of Motor Vehicles
+SRC005,inspection,Inspection Records,Local Mechanic
+SRC006,service,Service History,Toyota Service
+SRC007,insurance,Insurance Claims,State Insurance
+SRC008,accident,Accident Report,NHTSA
+SRC009,title,Title Records,County Records
+SRC010,auction,Auction History,ManheimAuctions
