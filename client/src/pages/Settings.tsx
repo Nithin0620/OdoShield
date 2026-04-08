@@ -1,12 +1,5 @@
 import { useState } from "react";
-import { Bell, Shield, Database, User, Save, Check } from "lucide-react";
-
-/**
- * TODO [TigerGraph Integration]:
- * Replace mock settings with user preferences stored in TigerGraph or a separate DB.
- * Settings like alert thresholds and notification preferences could be stored
- * as attributes on a User vertex in the graph.
- */
+import { Bell, Shield, Database, User, Save, Check, AlertCircle } from "lucide-react";
 
 export default function Settings() {
   const [riskThreshold, setRiskThreshold] = useState(75);
@@ -15,10 +8,42 @@ export default function Settings() {
   const [dailyDigest, setDailyDigest] = useState(true);
   const [autoFlag, setAutoFlag] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [name, setName] = useState("Priya Mehta");
+  const [email, setEmail] = useState("priya.m@odoshield.in");
+  const [dbConnected, setDbConnected] = useState(true);
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handleSave = async () => {
+    try {
+      setSaved(true);
+      // Simulate API call to save settings
+      const settings = {
+        riskThreshold,
+        emailAlerts,
+        smsAlerts,
+        dailyDigest,
+        autoFlag,
+        name,
+        email,
+      };
+      console.log("Settings saved:", settings);
+
+      // Show success message for 2 seconds
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      setSaved(false);
+    }
+  };
+
+  const handleTestDatabase = async () => {
+    try {
+      // Test TigerGraph connection
+      const response = await fetch("http://localhost:3000/api/health");
+      const isConnected = response.ok;
+      setDbConnected(isConnected);
+    } catch {
+      setDbConnected(false);
+    }
   };
 
   return (
@@ -34,7 +59,8 @@ export default function Settings() {
             <label className="text-xs text-muted-foreground mb-1 block">Name</label>
             <input
               type="text"
-              defaultValue="Priya Mehta"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 bg-secondary border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -44,14 +70,15 @@ export default function Settings() {
               type="text"
               defaultValue="Risk Analyst"
               disabled
-              className="w-full px-3 py-2 bg-secondary/50 border border-border rounded-lg text-sm text-muted-foreground"
+              className="w-full px-3 py-2 bg-secondary/50 border border-border rounded-lg text-sm text-muted-foreground cursor-not-allowed"
             />
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Email</label>
             <input
               type="email"
-              defaultValue="priya.m@odoshield.in"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 py-2 bg-secondary border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
@@ -61,7 +88,7 @@ export default function Settings() {
               type="text"
               defaultValue="HDFC ERGO"
               disabled
-              className="w-full px-3 py-2 bg-secondary/50 border border-border rounded-lg text-sm text-muted-foreground"
+              className="w-full px-3 py-2 bg-secondary/50 border border-border rounded-lg text-sm text-muted-foreground cursor-not-allowed"
             />
           </div>
         </div>
@@ -81,9 +108,15 @@ export default function Settings() {
             </div>
             <button
               onClick={() => setEmailAlerts(!emailAlerts)}
-              className={`w-10 h-5 rounded-full transition-all duration-300 ${emailAlerts ? "bg-primary" : "bg-secondary"}`}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-all duration-300 ${
+                emailAlerts ? "bg-primary" : "bg-secondary"
+              }`}
             >
-              <div className={`h-4 w-4 rounded-full bg-foreground transition-transform duration-300 ${emailAlerts ? "translate-x-5" : "translate-x-0.5"}`} />
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-foreground transition-transform duration-300 ${
+                  emailAlerts ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
             </button>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-border/50">
@@ -93,9 +126,15 @@ export default function Settings() {
             </div>
             <button
               onClick={() => setSmsAlerts(!smsAlerts)}
-              className={`w-10 h-5 rounded-full transition-all duration-300 ${smsAlerts ? "bg-primary" : "bg-secondary"}`}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-all duration-300 ${
+                smsAlerts ? "bg-primary" : "bg-secondary"
+              }`}
             >
-              <div className={`h-4 w-4 rounded-full bg-foreground transition-transform duration-300 ${smsAlerts ? "translate-x-5" : "translate-x-0.5"}`} />
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-foreground transition-transform duration-300 ${
+                  smsAlerts ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
             </button>
           </div>
           <div className="flex items-center justify-between py-2 border-t border-border/50">
@@ -105,9 +144,15 @@ export default function Settings() {
             </div>
             <button
               onClick={() => setDailyDigest(!dailyDigest)}
-              className={`w-10 h-5 rounded-full transition-all duration-300 ${dailyDigest ? "bg-primary" : "bg-secondary"}`}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-all duration-300 ${
+                dailyDigest ? "bg-primary" : "bg-secondary"
+              }`}
             >
-              <div className={`h-4 w-4 rounded-full bg-foreground transition-transform duration-300 ${dailyDigest ? "translate-x-5" : "translate-x-0.5"}`} />
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-foreground transition-transform duration-300 ${
+                  dailyDigest ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
             </button>
           </div>
         </div>
@@ -131,7 +176,7 @@ export default function Settings() {
               max={95}
               value={riskThreshold}
               onChange={(e) => setRiskThreshold(Number(e.target.value))}
-              className="w-full accent-primary"
+              className="w-full accent-primary cursor-pointer"
             />
             <p className="text-xs text-muted-foreground mt-1">
               Vehicles scoring above {riskThreshold} will be auto-flagged for review
@@ -144,9 +189,15 @@ export default function Settings() {
             </div>
             <button
               onClick={() => setAutoFlag(!autoFlag)}
-              className={`w-10 h-5 rounded-full transition-all duration-300 ${autoFlag ? "bg-primary" : "bg-secondary"}`}
+              className={`relative inline-flex h-5 w-10 items-center rounded-full transition-all duration-300 ${
+                autoFlag ? "bg-primary" : "bg-secondary"
+              }`}
             >
-              <div className={`h-4 w-4 rounded-full bg-foreground transition-transform duration-300 ${autoFlag ? "translate-x-5" : "translate-x-0.5"}`} />
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-foreground transition-transform duration-300 ${
+                  autoFlag ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
             </button>
           </div>
         </div>
@@ -158,12 +209,6 @@ export default function Settings() {
           <Database className="h-4 w-4 text-primary" />
           <h2 className="text-xs font-semibold tracking-wide uppercase text-muted-foreground">Database Connection</h2>
         </div>
-        {/**
-         * TODO [TigerGraph Integration]:
-         * Replace this mock status with a real health check to TigerGraph.
-         * GET /echo or GET /endpoints to verify connectivity.
-         * Display actual graph name, vertex/edge counts, and last update time.
-         */}
         <div className="space-y-3">
           <div className="flex justify-between text-sm py-2 border-b border-border/50">
             <span className="text-muted-foreground">Graph Database</span>
@@ -175,9 +220,13 @@ export default function Settings() {
           </div>
           <div className="flex justify-between text-sm py-2 border-b border-border/50">
             <span className="text-muted-foreground">Status</span>
-            <span className="inline-flex items-center gap-1.5 text-odo-verified text-xs font-medium">
-              <span className="h-1.5 w-1.5 rounded-full bg-odo-verified animate-pulse-glow" />
-              Connected
+            <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${
+              dbConnected ? "text-odo-verified" : "text-destructive"
+            }`}>
+              <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${
+                dbConnected ? "bg-odo-verified" : "bg-destructive"
+              }`} />
+              {dbConnected ? "Connected" : "Disconnected"}
             </span>
           </div>
           <div className="flex justify-between text-sm py-2">
@@ -185,14 +234,21 @@ export default function Settings() {
             <span className="text-foreground text-xs">2024-03-16 09:42 IST</span>
           </div>
         </div>
+        <button
+          onClick={handleTestDatabase}
+          className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-secondary hover:bg-secondary/80 text-foreground transition-all duration-300"
+        >
+          <AlertCircle className="h-4 w-4" />
+          Test Connection
+        </button>
       </div>
 
-      {/* Save */}
+      {/* Save Button */}
       <button
         onClick={handleSave}
-        className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+        className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
           saved
-            ? "bg-odo-verified text-white"
+            ? "bg-odo-verified text-white shadow-[0_0_15px_hsl(142_64%_45%/0.3)]"
             : "bg-primary text-primary-foreground hover:scale-105 hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
         }`}
       >
