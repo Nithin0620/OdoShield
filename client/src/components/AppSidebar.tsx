@@ -28,51 +28,72 @@ export function AppSidebar() {
   };
 
   return (
-    <aside className="w-60 shrink-0 border-r border-border flex flex-col bg-sidebar">
-      {/* Logo */}
-      <div className="h-16 flex items-center gap-2.5 px-5 border-b border-border">
-        <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center glow-primary">
-          <Shield className="h-4.5 w-4.5 text-primary" />
+    <aside className="w-64 shrink-0 flex flex-col bg-sidebar border-r border-sidebar-border relative z-40 font-sans">
+      {/* Console Header */}
+      <div className="p-8 border-b border-sidebar-border bg-white relative overflow-hidden">
+        <div className="absolute inset-0 road-bg opacity-[0.02] -rotate-1" />
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="h-10 w-10 flex items-center justify-center bg-primary text-primary-foreground rounded-xl shadow-lg shadow-primary/20 rotate-3 transition-transform hover:rotate-0">
+            <Shield className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-lg font-black tracking-tight uppercase text-primary leading-none">OdoShield</h1>
+            <div className="flex items-center gap-1.5 mt-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-odo-verified animate-pulse" />
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">Network Online</span>
+            </div>
+          </div>
         </div>
-        <span className="text-base font-bold tracking-tight text-foreground">
-          OdoShield
-        </span>
-        <Zap className="h-3 w-3 text-primary animate-pulse-glow ml-auto" />
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 py-4 px-3 space-y-1">
+      {/* Rack Nav */}
+      <nav className="flex-1 p-6 space-y-3">
         {navItems.map((item, i) => {
           const active = isActive(item.url);
           return (
             <Link
               key={item.title}
               to={item.url}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-300 group ${
+              className={`group flex items-center justify-between px-5 py-3.5 rounded-xl transition-all duration-300 relative ${
                 active
-                  ? "bg-primary/15 text-primary font-medium shadow-[inset_0_0_20px_-8px_hsl(var(--primary)/0.2)]"
-                  : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  ? "bg-primary text-primary-foreground shadow-xl shadow-primary/10 scale-[1.02] border border-primary"
+                  : "bg-transparent text-muted-foreground hover:bg-white hover:text-foreground hover:shadow-sm border border-transparent"
               }`}
-              style={{ animationDelay: `${i * 50}ms` }}
             >
-              <item.icon className={`h-4 w-4 transition-transform duration-300 group-hover:scale-110 ${active ? "text-primary" : ""}`} />
-              <span>{item.title}</span>
+              <div className="flex items-center gap-4">
+                <item.icon className={`h-4 w-4 transition-colors ${active ? "text-primary-foreground" : "text-primary/40 group-hover:text-primary"}`} />
+                <span className="text-sm font-black uppercase tracking-tight leading-none">{item.title}</span>
+              </div>
               {active && (
-                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary animate-pulse-glow" />
+                <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
               )}
             </Link>
           );
         })}
       </nav>
 
-      {/* User */}
-      <div className="border-t border-border p-4 flex items-center gap-3">
-        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground text-xs font-bold shadow-lg">
-          PM
-        </div>
-        <div className="min-w-0">
-          <p className="text-sm font-medium text-foreground truncate">Priya M.</p>
-          <p className="text-xs text-muted-foreground">Analyst</p>
+      {/* Telemetry Block */}
+      <div className="p-8 border-t border-sidebar-border bg-secondary/20 relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-1 road-bg opacity-[0.05]" />
+        <div className="space-y-5 relative z-10">
+          <div className="flex justify-between items-end">
+            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-none">Global Scan Rate</span>
+            <span className="text-[10px] font-black text-primary italic leading-none">12.4 Hz</span>
+          </div>
+          <div className="h-1.5 bg-secondary rounded-full overflow-hidden border border-border/40">
+             <div className="h-full bg-primary/30 animate-shimmer" style={{ width: '65%' }} />
+          </div>
+          
+          <div className="flex items-center gap-4 mt-8 p-4 bg-white rounded-2xl shadow-sm border border-border/40 group cursor-pointer hover:border-primary/20 transition-all">
+            <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center text-[11px] font-black text-primary border border-border relative group-hover:bg-primary group-hover:text-white transition-all transform group-hover:rotate-3 shadow-sm">
+              OP
+            </div>
+            <div className="flex-1 min-w-0">
+               <p className="text-xs font-black text-foreground truncate">Operator Priya</p>
+               <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest opacity-60">Level 4 Clearance</p>
+            </div>
+            <Zap className="h-3 w-3 text-accent animate-pulse" />
+          </div>
         </div>
       </div>
     </aside>

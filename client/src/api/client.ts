@@ -6,9 +6,9 @@
 // Support both VITE and REACT env var patterns
 const API_BASE_URL =
   (import.meta.env.VITE_API_BASE_URL ||
-   import.meta.env.VITE_APP_API_URL ||
-   process.env.REACT_APP_API_URL ||
-   'http://localhost:3000');
+    import.meta.env.VITE_APP_API_URL ||
+    (typeof process !== 'undefined' ? process.env.REACT_APP_API_URL : undefined) ||
+    'http://localhost:3000');
 
 export interface VehicleDetails {
   vin: string;
