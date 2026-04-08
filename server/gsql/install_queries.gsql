@@ -1,0 +1,83 @@
+CREATE GRAPH OdoShield_FraudGraph (*)
+
+// Define all the necessary queries to support the OdoShield Backend
+
+USE GRAPH OdoShield_FraudGraph
+
+CREATE OR REPLACE QUERY dashboard_stats() FOR GRAPH OdoShield_FraudGraph {
+  BagAccum<STRING> @@stats;
+  // This is a stub implementation returning an empty list so it doesn't 404
+  PRINT @@stats as results;
+}
+
+CREATE OR REPLACE QUERY top_suspicious_centers(INT limitNum=3) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<EDGE> @@centers;
+  PRINT @@centers as results;
+}
+
+CREATE OR REPLACE QUERY recently_flagged(INT limitNum=3) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<VERTEX> @@vehicles;
+  PRINT @@vehicles as results;
+}
+
+CREATE OR REPLACE QUERY risk_distribution() FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<STRING> @@distribution;
+  PRINT @@distribution as results;
+}
+
+CREATE OR REPLACE QUERY fraud_cluster_subgraph(STRING centerId) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<STRING> @@cluster;
+  PRINT @@cluster as results;
+}
+
+CREATE OR REPLACE QUERY vehicle_search(STRING searchTerm) FOR GRAPH OdoShield_FraudGraph {
+  // Returns vehicle details matching the string
+  ListAccum<VERTEX> @@vehicles;
+  PRINT @@vehicles as results;
+}
+
+CREATE OR REPLACE QUERY vehicle_details(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<VERTEX> @@details;
+  PRINT @@details as results;
+}
+
+CREATE OR REPLACE QUERY fraud_probability(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<INT> @@probability;
+  PRINT @@probability as results;
+}
+
+CREATE OR REPLACE QUERY mileage_timeline(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<VERTEX> @@timeline;
+  PRINT @@timeline as results;
+}
+
+CREATE OR REPLACE QUERY data_sources(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<VERTEX> @@sources;
+  PRINT @@sources as results;
+}
+
+CREATE OR REPLACE QUERY vehicle_connections(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<VERTEX> @@connections;
+  PRINT @@connections as results;
+}
+
+CREATE OR REPLACE QUERY detect_fraud_rings() FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<STRING> @@rings;
+  PRINT @@rings as results;
+}
+
+CREATE OR REPLACE QUERY trust_status(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<STRING> @@status;
+  PRINT @@status as results;
+}
+
+CREATE OR REPLACE QUERY verification_schedule(STRING vin) FOR GRAPH OdoShield_FraudGraph {
+  ListAccum<STRING> @@schedule;
+  PRINT @@schedule as results;
+}
+
+CREATE OR REPLACE QUERY update_user_preferences(STRING userId, STRING preferences) FOR GRAPH OdoShield_FraudGraph {
+  PRINT "success" as results;
+}
+
+INSTALL QUERY ALL

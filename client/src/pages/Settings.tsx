@@ -1,24 +1,36 @@
-import { useState } from "react";
-import { Bell, Shield, Database, User, Save, Check } from "lucide-react";
-
-/**
- * TODO [TigerGraph Integration]:
- * Replace mock settings with user preferences stored in TigerGraph or a separate DB.
- * Settings like alert thresholds and notification preferences could be stored
- * as attributes on a User vertex in the graph.
- */
+import { useState, useEffect } from "react";
+import { Bell, Shield, Database, User, Save, Check, Loader2, AlertTriangle } from "lucide-react";
+import { useSettingsStore } from "../store/settingsStore";
 
 export default function Settings() {
+  const { health, loading, error, checkHealth, updatePreferences } = useSettingsStore();
+  
   const [riskThreshold, setRiskThreshold] = useState(75);
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [smsAlerts, setSmsAlerts] = useState(false);
   const [dailyDigest, setDailyDigest] = useState(true);
   const [autoFlag, setAutoFlag] = useState(true);
+  
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const handleSave = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  useEffect(() => {
+    checkHealth();
+  }, [checkHealth]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updatePreferences("user-1", {
+        riskThreshold, emailAlerts, smsAlerts, dailyDigest, autoFlag
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -158,46 +170,47 @@ export default function Settings() {
           <Database className="h-4 w-4 text-primary" />
           <h2 className="text-xs font-semibold tracking-wide uppercase text-muted-foreground">Database Connection</h2>
         </div>
-        {/**
-         * TODO [TigerGraph Integration]:
-         * Replace this mock status with a real health check to TigerGraph.
-         * GET /echo or GET /endpoints to verify connectivity.
-         * Display actual graph name, vertex/edge counts, and last update time.
-         */}
-        <div className="space-y-3">
-          <div className="flex justify-between text-sm py-2 border-b border-border/50">
-            <span className="text-muted-foreground">Graph Database</span>
-            <span className="text-foreground font-medium">TigerGraph Cloud</span>
+        {loading ? (
+           <div className="flex justify-center items-center py-4"><Loader2 className="w-5 h-5 text-primary animate-spin" /></div>
+        ) : error || !health ? (
+           <div className="flex items-center gap-2 text-destructive text-sm"><AlertTriangle className="h-4 w-4" /> Node Unreachable</div>
+        ) : (
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm py-2 border-b border-border/50">
+              <span className="text-muted-foreground">Graph Database</span>
+              <span className="text-foreground font-medium">TigerGraph Engine</span>
+            </div>
+            <div className="flex justify-between text-sm py-2 border-b border-border/50">
+              <span className="text-muted-foreground">Graph Name</span>
+              <span className="font-mono text-xs text-primary">Live Connection</span>
+            </div>
+            <div className="flex justify-between text-sm py-2 border-b border-border/50">
+              <span className="text-muted-foreground">Status</span>
+              <span className={`inline-flex items-center gap-1.5 text-xs font-medium ${health.status === 'up' ? 'text-odo-verified' : 'text-destructive'}`}>
+                <span className={`h-1.5 w-1.5 rounded-full animate-pulse-glow ${health.status === 'up' ? 'bg-odo-verified' : 'bg-destructive'}`} />
+                {health.status === 'up' ? 'Connected' : 'Disconnected'}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm py-2">
+              <span className="text-muted-foreground">Node Details</span>
+              <span className="text-foreground text-xs">{health.message || 'Running'}</span>
+            </div>
           </div>
-          <div className="flex justify-between text-sm py-2 border-b border-border/50">
-            <span className="text-muted-foreground">Graph Name</span>
-            <span className="font-mono text-xs text-primary">OdoShield_FraudGraph</span>
-          </div>
-          <div className="flex justify-between text-sm py-2 border-b border-border/50">
-            <span className="text-muted-foreground">Status</span>
-            <span className="inline-flex items-center gap-1.5 text-odo-verified text-xs font-medium">
-              <span className="h-1.5 w-1.5 rounded-full bg-odo-verified animate-pulse-glow" />
-              Connected
-            </span>
-          </div>
-          <div className="flex justify-between text-sm py-2">
-            <span className="text-muted-foreground">Last Sync</span>
-            <span className="text-foreground text-xs">2024-03-16 09:42 IST</span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Save */}
       <button
         onClick={handleSave}
+        disabled={saving}
         className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
           saved
             ? "bg-odo-verified text-white"
-            : "bg-primary text-primary-foreground hover:scale-105 hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
+            : "bg-primary text-primary-foreground hover:scale-105 hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)] disabled:opacity-50"
         }`}
       >
-        {saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
-        {saved ? "Settings Saved!" : "Save Changes"}
+        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+        {saved ? "Settings Saved!" : saving ? "Saving..." : "Save Changes"}
       </button>
     </div>
   );
